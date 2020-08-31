@@ -1,0 +1,26 @@
+{
+  "name": "testrepo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "angular": "^1.8.0",
+    "d3": "^6.1.0",
+    "prismjs": "^1.21.0",
+    "react": "^16.13.1",
+    "rxjs": "^6.6.2",
+    "slate": "^0.58.4",
+    "tether": "^1.4.7"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "jest": "^26.4.2",
+    "pngjs": "^5.0.0",
+    "tslib": "^2.0.1"
+  }
+}
