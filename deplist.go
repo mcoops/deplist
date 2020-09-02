@@ -42,11 +42,11 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 					return err
 				}
 
-				foundTypes.DepFoundAddFlag(langGolang)
+				foundTypes.DepFoundAddFlag(LangGolang)
 
 				for _, p := range pkgs {
 					d := Dependency{
-						DepType: langGolang,
+						DepType: LangGolang,
 						Path:    p.PkgPath,
 						Files:   p.GoFiles,
 					}
@@ -62,13 +62,13 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 					return err
 				}
 
-				foundTypes.DepFoundAddFlag(langNodeJS)
+				foundTypes.DepFoundAddFlag(LangNodeJS)
 
 				for _, p := range pkgs {
 					splitIdx := strings.LastIndex(p, "@")
 
 					d := Dependency{
-						DepType: langNodeJS,
+						DepType: LangNodeJS,
 						Path:    p[:splitIdx],
 						Version: p[splitIdx+1:],
 					}
