@@ -11,10 +11,10 @@ import (
 
 // enums start at 1 to allow us to specify found languages 0 = nil
 const (
-	langGolang = 1 << iota
-	langNodeJS
-	langPython
-	langRuby
+	LangGolang = 1 << iota
+	LangNodeJS
+	LangPython
+	LangRuby
 )
 
 // GetDeps scans a given repository and returns all dependencies found in a DependencyList struct.
