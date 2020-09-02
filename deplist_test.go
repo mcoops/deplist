@@ -105,20 +105,20 @@ func BuildWant() []Dependency {
 
 	for _, n := range golangPaths {
 		d := Dependency{
-			depType: 1,
-			path:    n,
+			DepType: 1,
+			Path:    n,
 		}
 
 		deps = append(deps, d)
 	}
 
 	end := len(deps) - 2 // get the unicode ver
-	deps[end].version = "v0.3.3"
+	deps[end].Version = "v0.3.3"
 
 	for _, n := range nodejsPaths {
 		d := Dependency{
-			depType: 2,
-			path:    n,
+			DepType: 2,
+			Path:    n,
 		}
 		deps = append(deps, d)
 	}
@@ -141,12 +141,12 @@ func TestGetDeps(t *testing.T) {
 	}
 
 	for i, pkg := range want {
-		if pkg.path != got[i].path {
-			t.Errorf("GetDeps() got %s; want %s", got[i].path, pkg.path)
+		if pkg.Path != got[i].Path {
+			t.Errorf("GetDeps() got %s; want %s", got[i].Path, pkg.Path)
 		}
 
-		if pkg.version != "" && pkg.version != got[i].version {
-			t.Errorf("GetDeps() got %s %s; want %s %s", got[i].path, got[i].version, pkg.path, pkg.version)
+		if pkg.Version != "" && pkg.Version != got[i].Version {
+			t.Errorf("GetDeps() got %s %s; want %s %s", got[i].Path, got[i].Version, pkg.Path, pkg.Version)
 		}
 	}
 }

@@ -46,12 +46,12 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 
 				for _, p := range pkgs {
 					d := Dependency{
-						depType: langGolang,
-						path:    p.PkgPath,
-						files:   p.GoFiles,
+						DepType: langGolang,
+						Path:    p.PkgPath,
+						Files:   p.GoFiles,
 					}
 					if p.Module != nil {
-						d.version = p.Module.Version
+						d.Version = p.Module.Version
 					}
 					deps = append(deps, d)
 				}
@@ -68,9 +68,9 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 					splitIdx := strings.LastIndex(p, "@")
 
 					d := Dependency{
-						depType: langNodeJS,
-						path:    p[:splitIdx],
-						version: p[splitIdx+1:],
+						DepType: langNodeJS,
+						Path:    p[:splitIdx],
+						Version: p[splitIdx+1:],
 					}
 					deps = append(deps, d)
 				}
