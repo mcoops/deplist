@@ -42,7 +42,6 @@ func BuildWant() []Dependency {
 	}
 
 	nodejsPaths := []string{
-		"testrepo",
 		"angular",
 		"d3",
 		"d3-array",
@@ -129,7 +128,7 @@ func BuildWant() []Dependency {
 func TestGetDeps(t *testing.T) {
 	want := BuildWant()
 
-	got, gotBitmask, _ := GetDeps("test/testRepo/")
+	got, gotBitmask, _ := GetDeps("test/testRepo")
 
 	if gotBitmask != 3 {
 		t.Errorf("GotBitmask() != 3")
@@ -140,13 +139,19 @@ func TestGetDeps(t *testing.T) {
 		t.Errorf("GetDeps() = %d; want %d", len(got), len(want))
 	}
 
-	for i, pkg := range want {
-		if pkg.Path != got[i].Path {
-			t.Errorf("GetDeps() got %s; want %s", got[i].Path, pkg.Path)
+	for _, pkg := range want {
+		// because the maps are random...
+		flag := false
+		for _, g := range got {
+			if pkg.Path == g.Path {
+				if pkg.Version == "" || pkg.Version == g.Version {
+					flag = true
+					break
+				}
+			}
 		}
-
-		if pkg.Version != "" && pkg.Version != got[i].Version {
-			t.Errorf("GetDeps() got %s %s; want %s %s", got[i].Path, got[i].Version, pkg.Path, pkg.Version)
+		if !flag {
+			t.Errorf("GetDeps() wanted: %s - not found", pkg.Path)
 		}
 	}
 }

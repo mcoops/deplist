@@ -42,7 +42,9 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 					return err
 				}
 
-				foundTypes.DepFoundAddFlag(LangGolang)
+				if len(pkgs) > 0 {
+					foundTypes.DepFoundAddFlag(LangGolang)
+				}
 
 				for _, p := range pkgs {
 					d := Dependency{
@@ -55,22 +57,22 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 					}
 					deps = append(deps, d)
 				}
-
-			case "package.json":
+			// for now only go for yarn
+			case "yarn.lock":
 				pkgs, err := scan.GetNodeJSDeps(path)
 				if err != nil {
 					return err
 				}
 
-				foundTypes.DepFoundAddFlag(LangNodeJS)
+				if len(pkgs) > 0 {
+					foundTypes.DepFoundAddFlag(LangNodeJS)
+				}
 
-				for _, p := range pkgs {
-					splitIdx := strings.LastIndex(p, "@")
-
+				for name, version := range pkgs {
 					d := Dependency{
 						DepType: LangNodeJS,
-						Path:    p[:splitIdx],
-						Version: p[splitIdx+1:],
+						Path:    name,
+						Version: strings.Replace(version, "v", "", 1),
 					}
 					deps = append(deps, d)
 				}
