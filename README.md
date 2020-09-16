@@ -27,10 +27,10 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 
 ```
 const (
-	langGolang = 1 << iota
-	langNodeJS
-	langPython
-	langRuby
+	LangGolang = 1 << iota
+	LangNodeJS
+	LangPython
+	LangRuby
 )
 ```
 
