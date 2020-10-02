@@ -1,7 +1,9 @@
 package deplist
 
 import (
+	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 
@@ -12,10 +14,26 @@ import (
 // enums start at 1 to allow us to specify found languages 0 = nil
 const (
 	LangGolang = 1 << iota
+	LangJava
 	LangNodeJS
 	LangPython
 	LangRuby
 )
+
+func init() {
+	// check for the library required binaries
+	if _, err := exec.LookPath("yarn"); err != nil {
+		log.Fatal("yarn is required in PATH")
+	}
+
+	if _, err := exec.LookPath("go"); err != nil {
+		log.Fatal("go is required")
+	}
+
+	if _, err := exec.LookPath("mvn"); err != nil {
+		log.Fatal("maven is required")
+	}
+}
 
 // GetDeps scans a given repository and returns all dependencies found in a DependencyList struct.
 func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
@@ -27,6 +45,9 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 		return nil, 0, os.ErrNotExist
 	}
 
+	pomPath := filepath.Join(fullPath, "pom.xml")
+	goPath := filepath.Join(fullPath, "go.mod")
+
 	// point at the parent repo, but can't assume where the indicators will be
 	err := filepath.Walk(fullPath, func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() {
@@ -35,8 +56,33 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 				return filepath.SkipDir
 			}
 		} else {
+			// Two checks, one for filenames and the second switch for full
+			// paths. Useful if we're looking for top of repo
+
 			switch filename := info.Name(); filename {
-			case "go.mod": // just support the top level go.mod for now
+			// for now only go for yarn
+			case "yarn.lock":
+				pkgs, err := scan.GetNodeJSDeps(path)
+				if err != nil {
+					return err
+				}
+
+				if len(pkgs) > 0 {
+					foundTypes.DepFoundAddFlag(LangNodeJS)
+				}
+
+				for name, version := range pkgs {
+					deps = append(deps,
+						Dependency{
+							DepType: LangNodeJS,
+							Path:    name,
+							Version: strings.Replace(version, "v", "", 1),
+						})
+				}
+			}
+
+			switch path {
+			case goPath: // just support the top level go.mod for now
 				pkgs, err := scan.GetGolangDeps(path)
 				if err != nil {
 					return err
@@ -57,24 +103,23 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 					}
 					deps = append(deps, d)
 				}
-			// for now only go for yarn
-			case "yarn.lock":
-				pkgs, err := scan.GetNodeJSDeps(path)
+			case pomPath:
+				pkgs, err := scan.GetMvnDeps(path)
 				if err != nil {
 					return err
 				}
 
 				if len(pkgs) > 0 {
-					foundTypes.DepFoundAddFlag(LangNodeJS)
+					foundTypes.DepFoundAddFlag(LangJava)
 				}
 
 				for name, version := range pkgs {
-					d := Dependency{
-						DepType: LangNodeJS,
-						Path:    name,
-						Version: strings.Replace(version, "v", "", 1),
-					}
-					deps = append(deps, d)
+					deps = append(deps,
+						Dependency{
+							DepType: LangJava,
+							Path:    name,
+							Version: strings.Replace(version, "v", "", 1),
+						})
 				}
 			}
 		}

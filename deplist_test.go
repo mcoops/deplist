@@ -41,7 +41,7 @@ func BuildWant() []Dependency {
 		"github.com/mcoops/deplist",
 	}
 
-	nodejsPaths := []string{
+	npmSet1 := []string{
 		"angular",
 		"d3",
 		"d3-array",
@@ -57,6 +57,9 @@ func BuildWant() []Dependency {
 		"d3-dsv",
 		"commander",
 		"iconv-lite",
+	}
+
+	npmSet2 := []string{
 		"safer-buffer",
 		"rw",
 		"d3-ease",
@@ -114,14 +117,22 @@ func BuildWant() []Dependency {
 	end := len(deps) - 2 // get the unicode ver
 	deps[end].Version = "v0.3.3"
 
-	for _, n := range nodejsPaths {
+	for _, n := range npmSet1 {
 		d := Dependency{
-			DepType: 2,
+			DepType: 3,
 			Path:    n,
 		}
 		deps = append(deps, d)
 	}
+	deps = append(deps, Dependency{DepType: 2, Path: "com.amazonaws:aws-lambda-java-core"}) // java
 
+	for _, n := range npmSet2 {
+		d := Dependency{
+			DepType: 3,
+			Path:    n,
+		}
+		deps = append(deps, d)
+	}
 	return deps
 }
 
@@ -130,8 +141,8 @@ func TestGetDeps(t *testing.T) {
 
 	got, gotBitmask, _ := GetDeps("test/testRepo")
 
-	if gotBitmask != 3 {
-		t.Errorf("GotBitmask() != 3")
+	if gotBitmask != 7 {
+		t.Errorf("GotBitmask() != 7")
 	}
 
 	// iterate thru and compare

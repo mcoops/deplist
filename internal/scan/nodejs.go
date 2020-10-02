@@ -25,7 +25,7 @@ type yarnOutput struct {
 
 var gathered map[string]string
 
-func gather(dep yarnDependency) {
+func gatherNode(dep yarnDependency) {
 	// incase package starts with @
 	splitIdx := strings.LastIndex(dep.Name, "@")
 
@@ -55,7 +55,7 @@ func gather(dep yarnDependency) {
 
 	if len(dep.Children) > 0 {
 		for _, child := range dep.Children {
-			gather(child)
+			gatherNode(child)
 		}
 	}
 }
@@ -79,7 +79,7 @@ func GetNodeJSDeps(path string) (map[string]string, error) {
 	}
 
 	for _, deps := range yarnOutput.Data.Deps {
-		gather(deps)
+		gatherNode(deps)
 	}
 
 	return gathered, nil
