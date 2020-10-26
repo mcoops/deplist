@@ -33,6 +33,7 @@ func BuildWant() []Dependency {
 		"syscall",
 		"time",
 		"internal/poll",
+		"internal/syscall/execenv",
 		"internal/syscall/unix",
 		"internal/testlog",
 		"os",
