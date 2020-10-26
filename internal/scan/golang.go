@@ -1,11 +1,9 @@
 package scan
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"sort"
-	"strings"
 
 	"golang.org/x/tools/go/packages"
 )
@@ -24,30 +22,9 @@ func GetGolangDeps(path string) ([]*packages.Package, error) {
 	pkgs, err := packages.Load(cfg, "./...")
 
 	if err != nil {
-		if strings.Contains(err.Error(), "invalid pseudo-version") {
-			err := filepath.Walk(dirPath, func(path string, info os.FileInfo, err error) error {
-				if err != nil {
-					return err
-				}
-				if info.IsDir() && info.Name() == "vendor" {
-					return filepath.SkipDir
-				}
-				if info.Name() == "go.mod" {
-					currentDir := filepath.Dir(path)
-					if _, err := os.Stat(currentDir + "/vendor"); !os.IsNotExist(err) {
-						fmt.Printf("component has both go.mod and vendor, forcing use of vendor")
-						cfg.Env = append(os.Environ(), "GOFLAGS=-mod=vendor")
-						return nil
-					}
-				}
-				return nil
-			})
-			if err != nil {
-				fmt.Printf("error walking the path %q: %v, trying to load deps anyway\n", dirPath, err)
-			} else {
-				pkgs, err = packages.Load(cfg, "./...")
-			}
-		} else {
+		cfg.Env = append(os.Environ(), "GOFLAGS=-mod=vendor")
+		pkgs, err = packages.Load(cfg, "./...")
+		if err != nil {
 			return nil, err
 		}
 	}
