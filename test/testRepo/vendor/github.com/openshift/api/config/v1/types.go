@@ -1,10 +1,5 @@
 package v1
 
-import (
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/runtime"
-)
-
 // ConfigMapFileReference references a config map in a specific namespace.
 // The namespace must be specified at the point of use.
 type ConfigMapFileReference struct {
@@ -90,26 +85,6 @@ type LeaderElection struct {
 	Namespace string `json:"namespace,omitempty"`
 	// name indicates what name to use for the resource
 	Name string `json:"name,omitempty"`
-
-	// leaseDuration is the duration that non-leader candidates will wait
-	// after observing a leadership renewal until attempting to acquire
-	// leadership of a led but unrenewed leader slot. This is effectively the
-	// maximum duration that a leader can be stopped before it is replaced
-	// by another candidate. This is only applicable if leader election is
-	// enabled.
-	// +nullable
-	LeaseDuration metav1.Duration `json:"leaseDuration"`
-	// renewDeadline is the interval between attempts by the acting master to
-	// renew a leadership slot before it stops leading. This must be less
-	// than or equal to the lease duration. This is only applicable if leader
-	// election is enabled.
-	// +nullable
-	RenewDeadline metav1.Duration `json:"renewDeadline"`
-	// retryPeriod is the duration the clients should wait between attempting
-	// acquisition and renewal of a leadership. This is only applicable if
-	// leader election is enabled.
-	// +nullable
-	RetryPeriod metav1.Duration `json:"retryPeriod"`
 }
 
 // StringSource allows specifying a string inline, or externally via env var or file.
@@ -163,12 +138,6 @@ type AdmissionPluginConfig struct {
 	// Location is the path to a configuration file that contains the plugin's
 	// configuration
 	Location string `json:"location"`
-
-	// Configuration is an embedded configuration object to be used as the plugin's
-	// configuration. If present, it will be used instead of the path to the configuration file.
-	// +nullable
-	// +kubebuilder:pruning:PreserveUnknownFields
-	Configuration runtime.RawExtension `json:"configuration"`
 }
 
 type LogFormatType string
@@ -207,12 +176,6 @@ type AuditConfig struct {
 
 	// PolicyFile is a path to the file that defines the audit policy configuration.
 	PolicyFile string `json:"policyFile"`
-	// PolicyConfiguration is an embedded policy configuration object to be used
-	// as the audit policy configuration. If present, it will be used instead of
-	// the path to the policy file.
-	// +nullable
-	// +kubebuilder:pruning:PreserveUnknownFields
-	PolicyConfiguration runtime.RawExtension `json:"policyConfiguration"`
 
 	// Format of saved audits (legacy or json).
 	LogFormat LogFormatType `json:"logFormat"`
