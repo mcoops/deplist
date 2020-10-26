@@ -38,8 +38,6 @@ func BuildWant() []Dependency {
 		"internal/testlog",
 		"os",
 		"fmt",
-		"k8s.io/apimachinery/pkg/apis/meta/v1",
-		"k8s.io/apimachinery/pkg/runtime",
 		"github.com/openshift/api/config/v1",
 		"golang.org/x/text/unicode",
 		"github.com/mcoops/deplist",
