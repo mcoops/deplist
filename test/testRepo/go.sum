@@ -1,3 +1,13 @@
 golang.org/x/text v0.3.3 h1:cokOdA+Jmi5PJGXLlLllQSgYigAEfHXJAERHVMaCc2k=
 golang.org/x/text v0.3.3/go.mod h1:5Zoc/QRtKVWzQhOtBMvqHzDpF6irO9z98xDceosuGiQ=
 golang.org/x/tools v0.0.0-20180917221912-90fa682c2a6e/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
+github.com/openshift/api v0.0.0-20190904155310-a25bb2adc83e h1:bkyQv8DVWPGTC1K/kGJXW+ztu+9Y2okMgu1hQTeTojs=
+github.com/openshift/api v0.0.0-20190904155310-a25bb2adc83e/go.mod h1:dh9o4Fs58gpFXGSYfnVxGR9PnV53I8TW84pQaJDdGiY=
+github.com/openshift/api v3.9.1-0.20191028134408-abf28f93703b+incompatible h1:1mW1j1mik2++Z+ehEaqm2xcWGiGYJUK8SdbkTgTS+N4=
+github.com/openshift/api v3.9.1-0.20191028134408-abf28f93703b+incompatible/go.mod h1:dh9o4Fs58gpFXGSYfnVxGR9PnV53I8TW84pQaJDdGiY=
+github.com/openshift/api v3.9.1-0.20191031084152-11eee842dafd+incompatible h1:MhfR6QX7vyICs5FMZkFYiQ9KNJONpeI6cL5m07Kh4fc=
+github.com/openshift/api v3.9.1-0.20191031084152-11eee842dafd+incompatible/go.mod h1:dh9o4Fs58gpFXGSYfnVxGR9PnV53I8TW84pQaJDdGiY=
+github.com/openshift/api v3.9.1-0.20191112184635-1271508fbe8f+incompatible h1:z7qGID1Z7FgXuSCwbzt+EUdxfWeg6WVgQ0ifx+2i2lg=
+github.com/openshift/api v3.9.1-0.20191112184635-1271508fbe8f+incompatible/go.mod h1:dh9o4Fs58gpFXGSYfnVxGR9PnV53I8TW84pQaJDdGiY=
+github.com/openshift/api v3.9.1-0.20191112184635-86def77f6f90+incompatible h1:4bwALQ79iORo/XYv7yZjvygT8ElWSdjJqGd8vZu+WBc=
+github.com/openshift/api v3.9.1-0.20191112184635-86def77f6f90+incompatible/go.mod h1:dh9o4Fs58gpFXGSYfnVxGR9PnV53I8TW84pQaJDdGiY=

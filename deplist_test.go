@@ -37,6 +37,7 @@ func BuildWant() []Dependency {
 		"internal/testlog",
 		"os",
 		"fmt",
+		"github.com/openshift/api/config/v1",
 		"golang.org/x/text/unicode",
 		"github.com/mcoops/deplist",
 	}

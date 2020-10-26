@@ -1,6 +1,7 @@
 package scan
 
 import (
+	"os"
 	"path/filepath"
 	"sort"
 
@@ -21,7 +22,11 @@ func GetGolangDeps(path string) ([]*packages.Package, error) {
 	pkgs, err := packages.Load(cfg, "./...")
 
 	if err != nil {
-		return nil, err
+		cfg.Env = append(os.Environ(), "GOFLAGS=-mod=vendor")
+		pkgs, err = packages.Load(cfg, "./...")
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	// based off the original https://github.com/golang/tools/blob/e140590b16906206021525faa5a48c7314806569/go/packages/gopackages/main.go#L99
