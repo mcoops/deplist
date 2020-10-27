@@ -50,6 +50,11 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 
 	// point at the parent repo, but can't assume where the indicators will be
 	err := filepath.Walk(fullPath, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			// prevent panic by handling failure https://golang.org/pkg/path/filepath/#Walk
+			return err
+		}
+
 		if info.IsDir() {
 			// prevent walking down the vendors, docs, etc
 			if utils.BelongsToIgnoreList(info.Name()) {

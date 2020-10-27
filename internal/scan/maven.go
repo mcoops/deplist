@@ -16,9 +16,19 @@ func gatherMvn(mvn string) (string, string, error) {
 	mvnDep = strings.TrimSpace(mvnDep)
 	mvnDep = strings.TrimRight(mvnDep, ";")
 
-	mvnDep = mvnDep[:strings.LastIndex(mvnDep, ":")]
+	idx := strings.LastIndex(mvnDep, ":")
+
+	if idx == -1 || idx >= len(mvnDep) {
+		return "", "", fmt.Errorf("Invalid maven parsing index, looking for ':'")
+	}
+
+	mvnDep = mvnDep[:idx]
 
 	versionidx := strings.LastIndex(mvnDep, ":")
+
+	if versionidx == -1 || versionidx >= len(mvnDep) {
+		return "", "", fmt.Errorf("Invalid maven parsing index, looking for 2nd ':'")
+	}
 
 	return strings.TrimRight(mvnDep[:versionidx], ":jar"), "v" + mvnDep[versionidx+1:], nil
 }
@@ -50,7 +60,8 @@ func GetMvnDeps(path string) (map[string]string, error) {
 
 		if sepIdx != -1 {
 			// skip import and test
-			if strings.Contains(s, ":test") || strings.Contains(s, ":import") {
+			// avoid errors downloading deps, not much we can do here
+			if strings.Contains(s, ":test") || strings.Contains(s, ":import") || strings.Contains(s, "ERROR") {
 				continue
 			}
 
