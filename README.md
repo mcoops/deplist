@@ -37,3 +37,11 @@ const (
 * **error:**
 
   Standard Go error handling
+
+## Command Line
+
+```bash
+$ go build cmd/deplist.go
+$ ./deplist path/to/repo
+$ ./deplist -deptype 2 path/to/repo # NodeJs deps
+```
