@@ -105,6 +105,14 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 					}
 					if p.Module != nil {
 						d.Version = p.Module.Version
+						/* if replace is specified, then use that version
+						 * version only may exist here too
+						 * not seen when version and replace.version are differnt
+						 * but just in case
+						 */
+						if p.Module.Replace != nil {
+							d.Version = p.Module.Replace.Version
+						}
 					}
 					deps = append(deps, d)
 				}
