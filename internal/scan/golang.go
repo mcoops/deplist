@@ -17,13 +17,13 @@ const defaultOptions = packages.NeedDeps |
 func GetGolangDeps(path string) ([]*packages.Package, error) {
 	dirPath := filepath.Dir(path) // force directory
 
-	cfg := &packages.Config{Mode: defaultOptions, Dir: dirPath}
+	cfg := packages.Config{Mode: defaultOptions, Dir: dirPath}
 
-	pkgs, err := packages.Load(cfg, "./...")
+	pkgs, err := packages.Load(&cfg, "./...")
 
 	if err != nil {
 		cfg.Env = append(os.Environ(), "GOFLAGS=-mod=vendor")
-		pkgs, err = packages.Load(cfg, "./...")
+		pkgs, err = packages.Load(&cfg, "./...")
 		if err != nil {
 			return nil, err
 		}
