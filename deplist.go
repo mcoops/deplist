@@ -97,22 +97,13 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 					foundTypes.DepFoundAddFlag(LangGolang)
 				}
 
-				for _, p := range pkgs {
+				for path, goPkg := range pkgs {
+
 					d := Dependency{
 						DepType: LangGolang,
-						Path:    p.PkgPath,
-						Files:   p.GoFiles,
-					}
-					if p.Module != nil {
-						d.Version = p.Module.Version
-						/* if replace is specified, then use that version
-						 * version only may exist here too
-						 * not seen when version and replace.version are differnt
-						 * but just in case
-						 */
-						if p.Module.Replace != nil {
-							d.Version = p.Module.Replace.Version
-						}
+						Path:    path,
+						Files:   goPkg.Gofiles,
+						Version: goPkg.Version,
 					}
 					deps = append(deps, d)
 				}

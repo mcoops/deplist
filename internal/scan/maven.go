@@ -41,11 +41,8 @@ func GetMvnDeps(path string) (map[string]string, error) {
 	cmd := exec.Command("mvn", "--no-transfer-progress", "dependency:tree", "-DoutputType=dot")
 	cmd.Dir = dirPath
 
-	data, err := cmd.Output()
-
-	if err != nil {
-		fmt.Println(err)
-	}
+	// supress error, it always returns errors
+	data, _ := cmd.Output()
 
 	res := strings.Split(string(data), "\n")
 
