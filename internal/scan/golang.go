@@ -38,7 +38,6 @@ const defaultOptions = packages.NeedDeps |
 
 func getVersion(deps GoListDeps) string {
 	/* if replace is specified, then use that version
-	* version only may exist here too
 	* not seen when version and replace.version are differnt
 	* but just in case
 	 */
@@ -93,6 +92,7 @@ func runGoList(path string) ([]byte, error) {
 }
 
 func GetGolangDeps(path string) (map[string]GoPkg, error) {
+	// need to use a map as we'll get lots of duplicate entries
 	gathered := make(map[string]GoPkg)
 
 	out, err := runGoList(path)
