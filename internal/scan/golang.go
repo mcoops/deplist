@@ -64,7 +64,7 @@ func runCmd(path string, mod bool) ([]byte, error) {
 	out, err := cmd.Output()
 
 	if ctx.Err() == context.DeadlineExceeded {
-		return nil, errors.New("go list timeout")
+		return nil, ctx.Err()
 	}
 
 	if err != nil {
