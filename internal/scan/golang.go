@@ -53,12 +53,15 @@ func runCmd(path string, mod bool) ([]byte, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 	defer cancel()
 
-	modVendor := ""
-	if mod {
-		modVendor = "-mod=vendor"
-	}
 	// go list -f '{{if not .Standard}}{{.Module}}{{end}}' -json -deps ./...
-	cmd := exec.CommandContext(ctx, "go", "list", modVendor, "-f", "'{{if not .Standard}}{{.Module}}{{end}}'", "-json", "-deps", "./...")
+	var cmd *exec.Cmd
+
+	if mod == false {
+		cmd = exec.CommandContext(ctx, "go", "list", "-f", "'{{if not .Standard}}{{.Module}}{{end}}'", "-json", "-deps", "./...")
+	} else {
+		cmd = exec.CommandContext(ctx, "go", "list", "-mod=vendor", "-f", "'{{if not .Standard}}{{.Module}}{{end}}'", "-json", "-deps", "./...")
+	}
+
 	cmd.Dir = filepath.Dir(path) // // force directory
 	out, err := cmd.Output()
 
