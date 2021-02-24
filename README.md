@@ -41,7 +41,15 @@ const (
 ## Command Line
 
 ```bash
-$ go build cmd/deplist.go
-$ ./deplist path/to/repo
-$ ./deplist -deptype 2 path/to/repo # NodeJs deps
+$ make 
+$ ./deplist path/to/repo # Go deps
+golang.org/x/tools/go/gcexportdata v0.0.0-20201223010750-3fa0e8f87c1a
+golang.org/x/tools/internal/gocommand v0.0.0-20201223010750-3fa0e8f87c1a
+flag
+...
+$ ./deplist -deptype 4 path/to/repo # NodeJs deps
+whatwg-fetch 3.1.0
+less-loader 5.0.0
+pseudomap 1.0.2
+...
 ```
