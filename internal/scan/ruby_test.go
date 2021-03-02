@@ -1,6 +1,7 @@
 package scan
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -91,6 +92,9 @@ func Test_GetRubyDeps(t *testing.T) {
 		if got[k] != v {
 			t.Errorf("GetRubyDeps() - deps missing entry: %s = %s ", k, v)
 		}
+	}
+	for k := range got {
+		fmt.Printf("\"%s\",\n", k)
 	}
 
 	if len(got) != len(want) {
