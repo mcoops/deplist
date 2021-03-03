@@ -107,6 +107,82 @@ func BuildWant() []Dependency {
 		"tether",
 	}
 
+	rubySet := []string{
+		"fluent-plugin-kafka",
+		"fluent-plugin-rewrite-tag-filter",
+		"faraday",
+		"concurrent-ruby",
+		"elasticsearch",
+		"sigdump",
+		"syslog_protocol",
+		"uuidtools",
+		"aws-partitions",
+		"http-cookie",
+		"ltsv",
+		"quantile",
+		"connection_pool",
+		"tzinfo-data",
+		"unf",
+		"aws-sdk-core",
+		"fluent-plugin-cloudwatch-logs",
+		"fluent-plugin-kubernetes_metadata_filter",
+		"http-form_data",
+		"jmespath",
+		"kubeclient",
+		"msgpack",
+		"rest-client",
+		"dig_rb",
+		"unf_ext",
+		"to_regexp",
+		"cool.io",
+		"ethon",
+		"ffi",
+		"fluent-plugin-remote-syslog",
+		"lru_redux",
+		"prometheus-client",
+		"typhoeus",
+		"aws-sdk-cloudwatchlogs",
+		"fluent-plugin-prometheus",
+		"mime-types",
+		"mime-types-data",
+		"public_suffix",
+		"domain_name",
+		"aws-sigv4",
+		"elasticsearch-api",
+		"excon",
+		"fluentd",
+		"http_parser.rb",
+		"netrc",
+		"recursive-open-struct",
+		"aws-eventstream",
+		"systemd-journal",
+		"net-http-persistent",
+		"elasticsearch-transport",
+		"ffi-compiler",
+		"fluent-plugin-record-modifier",
+		"http-accept",
+		"http-parser",
+		"rake",
+		"digest-crc",
+		"fluent-plugin-splunk-hec",
+		"fluent-plugin-systemd",
+		"multi_json",
+		"multipart-post",
+		"ruby-kafka",
+		"strptime",
+		"fluent-plugin-concat",
+		"serverengine",
+		"fluent-plugin-multi-format-parser",
+		"tzinfo",
+		"fluent-mixin-config-placeholders",
+		"jsonpath",
+		"fluent-config-regexp-type",
+		"fluent-plugin-elasticsearch",
+		"http",
+		"yajl-ruby",
+		"addressable",
+	}
+
 	for _, n := range golangPaths {
 		d := Dependency{
 			DepType: 1,
@@ -135,6 +211,14 @@ func BuildWant() []Dependency {
 		}
 		deps = append(deps, d)
 	}
+
+	for _, n := range rubySet {
+		d := Dependency{
+			DepType: LangRuby,
+			Path:    n,
+		}
+		deps = append(deps, d)
+	}
 	return deps
 }
 
@@ -143,8 +227,8 @@ func TestGetDeps(t *testing.T) {
 
 	got, gotBitmask, _ := GetDeps("test/testRepo")
 
-	if gotBitmask != 7 {
-		t.Errorf("GotBitmask() != 7")
+	if gotBitmask != 23 {
+		t.Errorf("GotBitmask() != 7; got: %d", gotBitmask)
 	}
 
 	// iterate thru and compare

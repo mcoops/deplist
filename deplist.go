@@ -33,6 +33,10 @@ func init() {
 	if _, err := exec.LookPath("mvn"); err != nil {
 		log.Fatal("maven is required")
 	}
+
+	if _, err := exec.LookPath("bundle"); err != nil {
+		log.Fatal("bundler gem is required")
+	}
 }
 
 // GetDeps scans a given repository and returns all dependencies found in a DependencyList struct.
@@ -47,6 +51,7 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 
 	pomPath := filepath.Join(fullPath, "pom.xml")
 	goPath := filepath.Join(fullPath, "go.mod")
+	rubyPath := filepath.Join(fullPath, "Gemfile.lock")
 
 	// point at the parent repo, but can't assume where the indicators will be
 	err := filepath.Walk(fullPath, func(path string, info os.FileInfo, err error) error {
@@ -125,7 +130,26 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 							Version: strings.Replace(version, "v", "", 1),
 						})
 				}
+			case rubyPath:
+				pkgs, err := scan.GetRubyDeps(path)
+				if err != nil {
+					return err
+				}
+
+				if len(pkgs) > 0 {
+					foundTypes.DepFoundAddFlag(LangRuby)
+				}
+
+				for name, version := range pkgs {
+					deps = append(deps,
+						Dependency{
+							DepType: LangRuby,
+							Path:    name,
+							Version: strings.Replace(version, "v", "", 1),
+						})
+				}
 			}
+
 		}
 		return nil
 	})
