@@ -33,6 +33,10 @@ func init() {
 	if _, err := exec.LookPath("mvn"); err != nil {
 		log.Fatal("maven is required")
 	}
+
+	if _, err := exec.LookPath("bundle"); err != nil {
+		log.Fatal("bundler gem is required")
+	}
 }
 
 // GetDeps scans a given repository and returns all dependencies found in a DependencyList struct.
