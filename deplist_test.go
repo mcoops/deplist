@@ -183,6 +183,13 @@ func BuildWant() []Dependency {
 		"addressable",
 	}
 
+	pythonSet := []string{
+		"cotyledon",
+		"Flask",
+		"kuryr-lib",
+		"cryptography",
+	}
+
 	for _, n := range golangPaths {
 		d := Dependency{
 			DepType: 1,
@@ -219,6 +226,18 @@ func BuildWant() []Dependency {
 		}
 		deps = append(deps, d)
 	}
+
+	for _, n := range pythonSet {
+		d := Dependency{
+			DepType: LangPython,
+			Path:    n,
+		}
+		deps = append(deps, d)
+	}
+
+	end = len(deps) - 1 // get the cryptography ver
+	deps[end].Version = "2.3.0"
+
 	return deps
 }
 
@@ -227,8 +246,8 @@ func TestGetDeps(t *testing.T) {
 
 	got, gotBitmask, _ := GetDeps("test/testRepo")
 
-	if gotBitmask != 23 {
-		t.Errorf("GotBitmask() != 7; got: %d", gotBitmask)
+	if gotBitmask != 31 {
+		t.Errorf("GotBitmask() != 31; got: %d", gotBitmask)
 	}
 
 	// iterate thru and compare
