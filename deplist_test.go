@@ -246,8 +246,8 @@ func TestGetDeps(t *testing.T) {
 
 	got, gotBitmask, _ := GetDeps("test/testRepo")
 
-	if gotBitmask != 23 {
-		t.Errorf("GotBitmask() != 7; got: %d", gotBitmask)
+	if gotBitmask != 31 {
+		t.Errorf("GotBitmask() != 31; got: %d", gotBitmask)
 	}
 
 	// iterate thru and compare
