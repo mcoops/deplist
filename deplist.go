@@ -88,6 +88,7 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 							DepType: LangNodeJS,
 							Path:    name,
 							Version: strings.Replace(version, "v", "", 1),
+							Files:   []string{},
 						})
 				}
 			}
@@ -129,6 +130,7 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 							DepType: LangJava,
 							Path:    name,
 							Version: strings.Replace(version, "v", "", 1),
+							Files:   []string{},
 						})
 				}
 			case rubyPath:
@@ -147,6 +149,7 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 							DepType: LangRuby,
 							Path:    name,
 							Version: strings.Replace(version, "v", "", 1),
+							Files:   []string{},
 						})
 				}
 			case pythonPath:
@@ -165,6 +168,7 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 							DepType: LangPython,
 							Path:    name,
 							Version: version,
+							Files:   []string{},
 						})
 				}
 			}
