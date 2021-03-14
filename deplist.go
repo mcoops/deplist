@@ -52,6 +52,7 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 	pomPath := filepath.Join(fullPath, "pom.xml")
 	goPath := filepath.Join(fullPath, "go.mod")
 	rubyPath := filepath.Join(fullPath, "Gemfile.lock")
+	pythonPath := filepath.Join(fullPath, "requirements.txt")
 
 	// point at the parent repo, but can't assume where the indicators will be
 	err := filepath.Walk(fullPath, func(path string, info os.FileInfo, err error) error {
@@ -146,6 +147,24 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 							DepType: LangRuby,
 							Path:    name,
 							Version: strings.Replace(version, "v", "", 1),
+						})
+				}
+			case pythonPath:
+				pkgs, err := scan.GetPythonDeps(path)
+				if err != nil {
+					return err
+				}
+
+				if len(pkgs) > 0 {
+					foundTypes.DepFoundAddFlag(LangPython)
+				}
+
+				for name, version := range pkgs {
+					deps = append(deps,
+						Dependency{
+							DepType: LangPython,
+							Path:    name,
+							Version: version,
 						})
 				}
 			}
