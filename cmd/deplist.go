@@ -26,13 +26,13 @@ func main() {
 
 	if *deptypePtr == -1 {
 		for _, dep := range deps {
-			fmt.Printf("%s %s\n", dep.Path, dep.Version)
+			fmt.Printf("pkg:%s/%s@%s\n", deplist.GetLanguageStr(dep.DepType), dep.Path, dep.Version)
 		}
 	} else {
 		deptype := deplist.Bitmask(*deptypePtr)
 		for _, dep := range deps {
 			if (dep.DepType & deptype) == deptype {
-				fmt.Printf("%s %s\n", dep.Path, dep.Version)
+				fmt.Printf("%s@%s\n", dep.Path, dep.Version)
 			}
 		}
 	}
