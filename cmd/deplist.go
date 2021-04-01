@@ -11,6 +11,12 @@ func main() {
 	deptypePtr := flag.Int("deptype", -1, "golang, nodejs, python etc")
 
 	flag.Parse()
+
+	if flag.Args() == nil || len(flag.Args()) == 0 {
+		fmt.Println("Not path to scan was specified, i.e. deplist /tmp/files/")
+		return
+	}
+
 	path := flag.Args()[0]
 
 	deps, _, err := deplist.GetDeps(path)
