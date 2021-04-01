@@ -39,6 +39,21 @@ func init() {
 	}
 }
 
+func GetLanguageStr(bm Bitmask) string {
+	if bm&LangGolang != 0 {
+		return "go"
+	} else if bm&LangJava != 0 {
+		return "mvn"
+	} else if bm&LangNodeJS != 0 {
+		return "npm"
+	} else if bm&LangPython != 0 {
+		return "pypi"
+	} else if bm&LangRuby != 0 {
+		return "gem"
+	}
+	return "unknown"
+}
+
 // GetDeps scans a given repository and returns all dependencies found in a DependencyList struct.
 func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 	// var deps DependencyList
@@ -90,6 +105,31 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 							Version: strings.Replace(version, "v", "", 1),
 							Files:   []string{},
 						})
+				}
+			default:
+
+				ext := filepath.Ext(filename)
+
+				// java
+				if ext == ".jar" || ext == ".war" || ext == ".hpi" {
+					pkgs, err := scan.GetJarDeps(path)
+					if err != nil {
+						return err
+					}
+
+					if len(pkgs) > 0 {
+						foundTypes.DepFoundAddFlag(LangJava)
+					}
+
+					for name, version := range pkgs {
+						deps = append(deps,
+							Dependency{
+								DepType: LangJava,
+								Path:    name,
+								Version: version,
+								Files:   []string{},
+							})
+					}
 				}
 			}
 
