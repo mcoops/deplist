@@ -71,9 +71,15 @@ func runCmd(path string, mod bool) ([]byte, error) {
 
 	// mod=vendor sometimes still returns results but returns an error. In
 	// that case ignore the error and return what we can
-	if err != nil && len(out) == 0 {
-		// assume some retrival error, we have to redo the cmd with mod=vendor
-		return nil, err
+	if err != nil {
+		if mod == false {
+			// assume some retrival error, we have to redo the cmd with mod=vendor
+			return nil, err
+		} else {
+			if len(out) == 0 {
+				return nil, err
+			}
+		}
 	}
 
 	return out, nil
