@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
@@ -59,6 +60,12 @@ func runCmd(path string, mod bool) ([]byte, error) {
 	if mod == false {
 		cmd = exec.CommandContext(ctx, "go", "list", "-f", "'{{if not .Standard}}{{.Module}}{{end}}'", "-json", "-deps", "./...")
 	} else {
+		vendorDir := filepath.Join(filepath.Dir(path), "vendor")
+		if _, err := os.Stat(vendorDir); err != nil {
+			if os.IsNotExist(err) {
+				return nil, errors.New("No 'vendor' directory, can't use '-mod=vendor'")
+			}
+		}
 		cmd = exec.CommandContext(ctx, "go", "list", "-mod=vendor", "-f", "'{{if not .Standard}}{{.Module}}{{end}}'", "-json", "-deps", "./...")
 	}
 
@@ -95,7 +102,7 @@ func runGoList(path string) ([]byte, error) {
 		// rerun
 		out, err = runCmd(path, true)
 		if err != nil {
-			return nil, errors.New("error running go list")
+			return nil, err
 		}
 	}
 
