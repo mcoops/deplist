@@ -23,7 +23,7 @@ type JarInfo struct {
 	Files []string
 }
 
-var JarFilter = [...]string{".jar", ".war", ".hpi", ".rar", ".ear"}
+var JarFilter = [...]string{".jar", ".war", ".hpi", ".rar", ".ear", ".zip"}
 
 var jarVersionRegex *regexp.Regexp
 
