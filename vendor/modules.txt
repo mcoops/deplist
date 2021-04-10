@@ -1,4 +1,4 @@
-# github.com/mcoops/jargo v0.0.0-20210407125841-3631bd3d64ba
+# github.com/mcoops/jargo v0.0.0-20210410052334-26a02fc9f941
 github.com/mcoops/jargo
 # github.com/vifraa/gopom v0.1.0
 github.com/vifraa/gopom

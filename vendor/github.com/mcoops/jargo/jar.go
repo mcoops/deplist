@@ -30,7 +30,7 @@ var jarVersionRegex *regexp.Regexp
 const MANIFEST_FULL_NAME = "META-INF/MANIFEST.MF"
 
 func init() {
-	jarVersionRegex = regexp.MustCompile(".*?-([0-9\\.][0-9\\.-]*)\\.jar")
+	jarVersionRegex = regexp.MustCompile(".*?-([0-9\\.][\\w0-9\\.-]*)\\.jar")
 }
 
 // https://codereview.stackexchange.com/questions/191238/return-unique-items-in-a-go-slice/192954#192954
