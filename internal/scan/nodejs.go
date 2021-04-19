@@ -3,10 +3,11 @@ package scan
 import (
 	"encoding/json"
 	"fmt"
-	"golang.org/x/mod/semver"
 	"os/exec"
 	"path/filepath"
 	"strings"
+
+	"golang.org/x/mod/semver"
 )
 
 type yarnDependencies []yarnDependency
@@ -24,7 +25,7 @@ type yarnOutput struct {
 }
 
 type npmDependency struct {
-	Version string `json:"version"`
+	Version      string                   `json:"version"`
 	Dependencies map[string]npmDependency `json:"dependencies"`
 }
 
