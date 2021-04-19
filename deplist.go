@@ -26,6 +26,10 @@ func init() {
 		log.Fatal("yarn is required in PATH")
 	}
 
+	if _, err := exec.LookPath("npm"); err != nil {
+		log.Fatal("npm is required in PATH")
+	}
+
 	if _, err := exec.LookPath("go"); err != nil {
 		log.Fatal("go is required")
 	}
@@ -86,8 +90,8 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 			// paths. Useful if we're looking for top of repo
 
 			switch filename := info.Name(); filename {
-			// for now only go for yarn
-			case "yarn.lock":
+			// for now only go for yarn and npm
+			case "yarn.lock", "package-lock.json":
 				pkgs, err := scan.GetNodeJSDeps(path)
 				if err != nil {
 					return err
