@@ -113,22 +113,21 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 				// java
 				if ext == ".jar" || ext == ".war" || ext == ".hpi" {
 					pkgs, err := scan.GetJarDeps(path)
-					if err != nil {
-						return err
-					}
+					if err == nil {
 
-					if len(pkgs) > 0 {
-						foundTypes.DepFoundAddFlag(LangJava)
-					}
+						if len(pkgs) > 0 {
+							foundTypes.DepFoundAddFlag(LangJava)
+						}
 
-					for name, version := range pkgs {
-						deps = append(deps,
-							Dependency{
-								DepType: LangJava,
-								Path:    name,
-								Version: version,
-								Files:   []string{},
-							})
+						for name, version := range pkgs {
+							deps = append(deps,
+								Dependency{
+									DepType: LangJava,
+									Path:    name,
+									Version: version,
+									Files:   []string{},
+								})
+						}
 					}
 				}
 			}
