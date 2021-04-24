@@ -120,6 +120,9 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 						}
 
 						for name, version := range pkgs {
+							// just in case we report the full path to the dep
+							name = strings.Replace(name, fullPath, "", 1)
+
 							deps = append(deps,
 								Dependency{
 									DepType: LangJava,

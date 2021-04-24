@@ -1,44 +1,30 @@
 package scan
 
 import (
-	"fmt"
 	"os/exec"
 	"path/filepath"
 	"strings"
-
-	"golang.org/x/mod/semver"
 )
-
-type mvnString string
-
-func gatherMvn(mvn string) (string, string, error) {
-	mvnDep := strings.ReplaceAll(string(mvn), "\"", "")
-	mvnDep = strings.TrimSpace(mvnDep)
-	mvnDep = strings.TrimRight(mvnDep, ";")
-
-	idx := strings.LastIndex(mvnDep, ":")
-
-	if idx == -1 || idx >= len(mvnDep) {
-		return "", "", fmt.Errorf("Invalid maven parsing index, looking for ':'")
-	}
-
-	mvnDep = mvnDep[:idx]
-
-	versionidx := strings.LastIndex(mvnDep, ":")
-
-	if versionidx == -1 || versionidx >= len(mvnDep) {
-		return "", "", fmt.Errorf("Invalid maven parsing index, looking for 2nd ':'")
-	}
-
-	return strings.TrimRight(mvnDep[:versionidx], ":jar"), "v" + mvnDep[versionidx+1:], nil
-}
 
 func GetMvnDeps(path string) (map[string]string, error) {
 	var gathered map[string]string
+	var found map[string]bool
 
 	dirPath := filepath.Dir(path)
 
-	cmd := exec.Command("mvn", "--no-transfer-progress", "dependency:tree", "-DoutputType=dot")
+	// cmd := exec.Command("mvn",
+	// 	"--no-transfer-progress",
+	// 	"dependency:tree",
+	// 	"-DoutputType=dot",
+	// )
+
+	// Opposed to mvn dependency:tree which fails if there's issues with
+	// finding build deps dependency:collect does not fail to continue
+	cmd := exec.Command(
+		"mvn",
+		"--no-transfer-progress",
+		"dependency:collect",
+		"-DincludeScope=runtime")
 	cmd.Dir = dirPath
 
 	// supress error, it always returns errors
@@ -49,34 +35,37 @@ func GetMvnDeps(path string) (map[string]string, error) {
 	gathered = make(map[string]string)
 
 	for _, s := range res {
-		// example:
-		// [INFO] 	"com.google.inject:guice:jar:4.0:compile (optional) " -> "javax.inject:javax.inject:jar:1:compile (optional) " ;
+		if len(s) < 5 && !strings.HasPrefix(s, "[INFO]") {
+			continue
+		}
 
-		// do the lookup once
-		sepIdx := strings.Index(s, "->")
+		if !strings.HasSuffix(s, "compile") && !strings.HasSuffix(s, "runtime") {
+			continue
+		}
 
-		if sepIdx != -1 {
-			// skip import and test
-			// avoid errors downloading deps, not much we can do here
-			if strings.Contains(s, ":test") || strings.Contains(s, ":import") || strings.Contains(s, "ERROR") {
-				continue
-			}
+		// remove the :compile or :runtime off the end
+		lastColon := strings.LastIndex(s, ":")
+		if lastColon == -1 {
+			continue
+		}
+		s = s[:lastColon]
 
-			// only get the second part
-			part := s[sepIdx+len("-> "):]
+		verIdx := strings.LastIndex(s, ":")
+		if verIdx == -1 || len(s) < (verIdx+1) {
+			continue
+		}
+		ver := s[verIdx+1:]
 
-			repo, version, err := gatherMvn(part)
+		name := strings.Replace(s, ":"+ver, "", 1)
 
-			// only if no error append
-			if err == nil {
-				// just in case do the semver thing
-				if _, ok := gathered[repo]; ok {
-					gathered[repo] = semver.Max(gathered[repo], version)
-				} else {
-					gathered[repo] = version
-				}
-			}
+		startIdx := strings.Index(name, "    ")
+		if startIdx == -1 || len(name) < (startIdx+4) {
+			continue
+		}
+		name = name[startIdx+4:]
 
+		if _, ok := found[name+ver]; ok == false {
+			gathered[name] = ver
 		}
 	}
 	return gathered, nil

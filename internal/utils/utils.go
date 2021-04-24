@@ -8,6 +8,8 @@ func BelongsToIgnoreList(needle string) bool {
 		"vendor",
 		"scripts",
 		"docs",
+		"test",
+		"tests",
 		".git":
 		return true
 	}
