@@ -127,13 +127,16 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 							// just in case we report the full path to the dep
 							name = strings.Replace(name, fullPath, "", 1)
 
-							deps = append(deps,
-								Dependency{
-									DepType: LangJava,
-									Path:    name,
-									Version: version,
-									Files:   []string{},
-								})
+							// if the dep ends with -javadoc or -sources, not really interested
+							if !strings.HasSuffix(version, "-javadoc") && !strings.HasSuffix(version, "-sources") {
+								deps = append(deps,
+									Dependency{
+										DepType: LangJava,
+										Path:    name,
+										Version: version,
+										Files:   []string{},
+									})
+							}
 						}
 					}
 				}
