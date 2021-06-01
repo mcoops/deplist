@@ -6,8 +6,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
-
-	"golang.org/x/mod/semver"
 )
 
 type yarnDependencies []yarnDependency
@@ -33,23 +31,27 @@ type npmListOutput struct {
 	Dependencies map[string]npmDependency `json:"dependencies"`
 }
 
-var gathered map[string]string
+type NodeJSGather struct {
+	Name    string
+	Version string
+}
+
+// TODO: remove this global
+var gatheredNode map[string]NodeJSGather
 
 func recordPackage(packageName, version string) {
-	// compare everything
-	if !strings.HasPrefix(version, "v") {
-		version = "v" + version
+	// opposite now, we don't care if its specifying version ranges like 5.x.x,
+	// or 5.* etc. Just get the versions.
+	if len(version) > 0 &&
+		(version[0] == '^' || version[0] == '~' || version[0] == '*' || version[len(version)-1] == 'x') {
+		return
 	}
-	version = strings.Replace(version, "^", "", 1)
-	version = strings.Replace(version, "~", "", 1)
 
-	version = strings.Replace(version, "x", "0", 1)
-	version = strings.Replace(version, "*", "0.0.0", 1)
-
-	if oldVersion, ok := gathered[packageName]; ok {
-		gathered[packageName] = semver.Max(oldVersion, version)
-	} else {
-		gathered[packageName] = version
+	if _, ok := gatheredNode[packageName+version]; !ok {
+		gatheredNode[packageName+version] = NodeJSGather{
+			Name:    packageName,
+			Version: version,
+		}
 	}
 }
 
@@ -62,10 +64,10 @@ func gatherYarnNode(dep yarnDependency) {
 
 	if splitIdx != -1 {
 		name = dep.Name[:splitIdx]
-		version = "v" + dep.Name[splitIdx+1:]
+		version = dep.Name[splitIdx+1:]
 	} else {
 		name = dep.Name
-		version = "v0.0.0"
+		version = ""
 	}
 
 	recordPackage(name, version)
@@ -84,7 +86,7 @@ func gatherNPMNode(name string, dependency npmDependency) {
 	}
 }
 
-func GetNodeJSDeps(path string) (map[string]string, error) {
+func GetNodeJSDeps(path string) (map[string]NodeJSGather, error) {
 	switch filepath.Base(path) {
 	case "yarn.lock":
 		return getYarnDeps(path)
@@ -94,9 +96,9 @@ func GetNodeJSDeps(path string) (map[string]string, error) {
 	return nil, fmt.Errorf("unknown NodeJS dependency file %q", path)
 }
 
-func getYarnDeps(path string) (map[string]string, error) {
+func getYarnDeps(path string) (map[string]NodeJSGather, error) {
 	var yarnOutput yarnOutput
-	gathered = make(map[string]string)
+	gatheredNode = make(map[string]NodeJSGather)
 
 	dirPath := filepath.Dir(path)
 
@@ -115,19 +117,21 @@ func getYarnDeps(path string) (map[string]string, error) {
 		gatherYarnNode(deps)
 	}
 
-	return gathered, nil
+	return gatheredNode, nil
 }
 
-func getNPMDeps(path string) (map[string]string, error) {
+func getNPMDeps(path string) (map[string]NodeJSGather, error) {
 	var npmOutput npmListOutput
-	gathered = make(map[string]string)
+	gatheredNode = make(map[string]NodeJSGather)
 
 	cmd := exec.Command("npm", "list", "--prod", "--json", "--depth=99")
 	cmd.Dir = filepath.Dir(path)
 
 	data, err := cmd.Output()
 
-	if err != nil {
+	// npm has a nasty habbit of not returning cleanly so if there is data
+	// just attempt to unmarshal
+	if data == nil && err != nil {
 		return nil, err
 	}
 
@@ -140,5 +144,5 @@ func getNPMDeps(path string) (map[string]string, error) {
 		gatherNPMNode(depName, dep)
 	}
 
-	return gathered, nil
+	return gatheredNode, nil
 }

@@ -91,7 +91,17 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 
 			switch filename := info.Name(); filename {
 			// for now only go for yarn and npm
-			case "yarn.lock", "package-lock.json":
+			case "package-lock.json":
+				// if theres not a yarn.lock fall thru
+				if _, err := os.Stat(
+					filepath.Join(
+						filepath.Dir(path),
+						"yarn.lock")); err == nil {
+					return nil
+				}
+				fallthrough
+
+			case "yarn.lock":
 				pkgs, err := scan.GetNodeJSDeps(path)
 				if err != nil {
 					return err
@@ -101,12 +111,12 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 					foundTypes.DepFoundAddFlag(LangNodeJS)
 				}
 
-				for name, version := range pkgs {
+				for _, p := range pkgs {
 					deps = append(deps,
 						Dependency{
 							DepType: LangNodeJS,
-							Path:    name,
-							Version: strings.Replace(version, "v", "", 1),
+							Path:    p.Name,
+							Version: p.Version,
 							Files:   []string{},
 						})
 				}

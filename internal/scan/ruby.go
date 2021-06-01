@@ -7,7 +7,7 @@ import (
 )
 
 func GetRubyDeps(path string) (map[string]string, error) {
-	gathered = make(map[string]string)
+	gathered := make(map[string]string)
 
 	dirPath := filepath.Dir(path)
 
