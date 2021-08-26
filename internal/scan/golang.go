@@ -12,7 +12,6 @@ import (
 	"time"
 
 	"golang.org/x/mod/semver"
-	"golang.org/x/tools/go/packages"
 )
 
 type GoListDeps struct {
@@ -30,12 +29,6 @@ type GoPkg struct {
 	Version string
 	Gofiles []string
 }
-
-const defaultOptions = packages.NeedDeps |
-	packages.NeedImports |
-	packages.NeedModule |
-	packages.NeedFiles |
-	packages.NeedName
 
 func getVersion(deps GoListDeps) string {
 	/* if replace is specified, then use that version
@@ -57,13 +50,13 @@ func runCmd(path string, mod bool) ([]byte, error) {
 	// go list -f '{{if not .Standard}}{{.Module}}{{end}}' -json -deps ./...
 	var cmd *exec.Cmd
 
-	if mod == false {
+	if !mod {
 		cmd = exec.CommandContext(ctx, "go", "list", "-f", "'{{if not .Standard}}{{.Module}}{{end}}'", "-json", "-deps", "./...")
 	} else {
 		vendorDir := filepath.Join(filepath.Dir(path), "vendor")
 		if _, err := os.Stat(vendorDir); err != nil {
 			if os.IsNotExist(err) {
-				return nil, errors.New("No 'vendor' directory, can't use '-mod=vendor'")
+				return nil, errors.New("no 'vendor' directory, can't use '-mod=vendor'")
 			}
 		}
 		cmd = exec.CommandContext(ctx, "go", "list", "-mod=vendor", "-f", "'{{if not .Standard}}{{.Module}}{{end}}'", "-json", "-deps", "./...")
@@ -79,7 +72,7 @@ func runCmd(path string, mod bool) ([]byte, error) {
 	// mod=vendor sometimes still returns results but returns an error. In
 	// that case ignore the error and return what we can
 	if err != nil {
-		if mod == false {
+		if !mod {
 			// assume some retrival error, we have to redo the cmd with mod=vendor
 			return nil, err
 		} else {

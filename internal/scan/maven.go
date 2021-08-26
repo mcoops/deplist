@@ -64,7 +64,7 @@ func GetMvnDeps(path string) (map[string]string, error) {
 		}
 		name = name[startIdx+4:]
 
-		if _, ok := found[name+ver]; ok == false {
+		if _, ok := found[name+ver]; !ok {
 			gathered[name] = ver
 		}
 	}

@@ -10,13 +10,6 @@ import (
 // Account for >, <, >=, <=, ==, !=, ~= and *
 var /* const */ re = regexp.MustCompile(`[<>!~*]+`)
 
-func max(x, y int) int {
-	if x > y {
-		return x
-	}
-	return y
-}
-
 func GetPythonDeps(path string) (map[string]string, error) {
 	gathered := make(map[string]string)
 
