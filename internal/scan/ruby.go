@@ -1,7 +1,7 @@
 package scan
 
 import (
-	"io/ioutil"
+	"errors"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -14,7 +14,7 @@ func GetRubyDeps(path string) (map[string]string, error) {
 	dirPath := filepath.Dir(path)
 
 	// override the gem path otherwise might hit perm issues and it's annoying
-	gem_path, err := ioutil.TempDir("", "gem_vendor")
+	gem_path, err := os.MkdirTemp("", "gem_vendor")
 	if err != nil {
 		return nil, err
 	}
@@ -25,7 +25,8 @@ func GetRubyDeps(path string) (map[string]string, error) {
 	//Make sure that the Gemfile we are loading is supported by the version of bundle currently installed.
 	cmd := exec.Command("bundle", "update", "--bundler")
 	cmd.Dir = dirPath
-	cmd.Env = append(cmd.Env, "GEM_HOME="+gem_path)
+	cmd.Env = os.Environ()
+	cmd.Env = append(cmd.Env, "BUNDLE_PATH="+gem_path)
 	_, err = cmd.Output()
 	if err != nil {
 		return nil, err
@@ -34,9 +35,13 @@ func GetRubyDeps(path string) (map[string]string, error) {
 	cmd = exec.Command("bundle", "list")
 
 	cmd.Dir = dirPath
-	cmd.Env = append(cmd.Env, "GEM_HOME="+gem_path)
+	cmd.Env = os.Environ()
+	cmd.Env = append(cmd.Env, "BUNDLE_PATH="+gem_path)
 
 	data, err := cmd.Output()
+	if err != nil {
+		return nil, errors.New(gem_path + " " + err.Error())
+	}
 
 	splitOutput := strings.Split(string(data), "\n")
 
@@ -48,10 +53,6 @@ func GetRubyDeps(path string) (map[string]string, error) {
 		dep := strings.Split(rawDep, " ")
 		dep[1] = dep[1][1 : len(dep[1])-1]
 		gathered[dep[0]] = dep[1]
-	}
-
-	if err != nil {
-		return nil, err
 	}
 
 	return gathered, nil
