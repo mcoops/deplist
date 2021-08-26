@@ -1,3 +1,5 @@
+[![Build](https://github.com/mcoops/deplist/actions/workflows/go.yml/badge.svg)](https://github.com/mcoops/deplist/actions/workflows/go.yml)
+
 # deplist
 
 Scans a given repo for Golang, NodeJS (more comming) for dependencies.
