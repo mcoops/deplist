@@ -8,25 +8,27 @@ import (
 	"strings"
 )
 
+// GetRubyDeps uses `bundle update --bundler` to list ruby dependencies when a
+// Gemfile.lock file exists
 func GetRubyDeps(path string) (map[string]string, error) {
 	gathered := make(map[string]string)
 
 	dirPath := filepath.Dir(path)
 
 	// override the gem path otherwise might hit perm issues and it's annoying
-	gem_path, err := os.MkdirTemp("", "gem_vendor")
+	gemPath, err := os.MkdirTemp("", "gem_vendor")
 	if err != nil {
 		return nil, err
 	}
 
 	// cleanup after ourselves
-	defer os.RemoveAll(gem_path)
+	defer os.RemoveAll(gemPath)
 
 	//Make sure that the Gemfile we are loading is supported by the version of bundle currently installed.
 	cmd := exec.Command("bundle", "update", "--bundler")
 	cmd.Dir = dirPath
 	cmd.Env = os.Environ()
-	cmd.Env = append(cmd.Env, "BUNDLE_PATH="+gem_path)
+	cmd.Env = append(cmd.Env, "BUNDLE_PATH="+gemPath)
 	_, err = cmd.Output()
 	if err != nil {
 		return nil, err
@@ -36,11 +38,11 @@ func GetRubyDeps(path string) (map[string]string, error) {
 
 	cmd.Dir = dirPath
 	cmd.Env = os.Environ()
-	cmd.Env = append(cmd.Env, "BUNDLE_PATH="+gem_path)
+	cmd.Env = append(cmd.Env, "BUNDLE_PATH="+gemPath)
 
 	data, err := cmd.Output()
 	if err != nil {
-		return nil, errors.New(gem_path + " " + err.Error())
+		return nil, errors.New(gemPath + " " + err.Error())
 	}
 
 	splitOutput := strings.Split(string(data), "\n")

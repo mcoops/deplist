@@ -31,6 +31,7 @@ type npmListOutput struct {
 	Dependencies map[string]npmDependency `json:"dependencies"`
 }
 
+// NodeJSGather dependencies found, name and version
 type NodeJSGather struct {
 	Name    string
 	Version string
@@ -86,6 +87,9 @@ func gatherNPMNode(name string, dependency npmDependency) {
 	}
 }
 
+// GetNodeJSDeps scans the path for either `yarn.lock` or `package-lock.json`,
+// then use the appropriate pkg managers to produce depencies lists of type
+// `NodeJSGather`
 func GetNodeJSDeps(path string) (map[string]NodeJSGather, error) {
 	switch filepath.Base(path) {
 	case "yarn.lock":

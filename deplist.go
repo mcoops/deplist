@@ -43,6 +43,7 @@ func init() {
 	}
 }
 
+// GetLanguageStr returns from a bitmask return the ecosystem name
 func GetLanguageStr(bm Bitmask) string {
 	if bm&LangGolang != 0 {
 		return "go"

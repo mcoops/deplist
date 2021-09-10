@@ -6,6 +6,8 @@ import (
 	"strings"
 )
 
+// GetMvnDeps uses the mvn command to attempt to list the dependencies for a
+// given project located at `path`
 func GetMvnDeps(path string) (map[string]string, error) {
 	var gathered map[string]string
 	var found map[string]bool
@@ -27,7 +29,7 @@ func GetMvnDeps(path string) (map[string]string, error) {
 		"-DincludeScope=runtime")
 	cmd.Dir = dirPath
 
-	// supress error, it always returns errors
+	// suppress error, it always returns errors
 	data, _ := cmd.Output()
 
 	res := strings.Split(string(data), "\n")

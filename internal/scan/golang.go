@@ -14,6 +14,8 @@ import (
 	"golang.org/x/mod/semver"
 )
 
+// GoListDeps holds the import path, version and gofiles for a given go
+// dependency
 type GoListDeps struct {
 	ImportPath string `json:"ImportPath"`
 	Module     struct {
@@ -25,6 +27,7 @@ type GoListDeps struct {
 	GoFiles []string `json:"GoFiles"`
 }
 
+// GoPkg holds the version and go paths/files for a given dep
 type GoPkg struct {
 	Version string
 	Gofiles []string
@@ -32,7 +35,7 @@ type GoPkg struct {
 
 func getVersion(deps GoListDeps) string {
 	/* if replace is specified, then use that version
-	* not seen when version and replace.version are differnt
+	* not seen when version and replace.version are different
 	* but just in case
 	 */
 	if deps.Module.Replace.Version != "" {
@@ -75,10 +78,10 @@ func runCmd(path string, mod bool) ([]byte, error) {
 		if !mod {
 			// assume some retrival error, we have to redo the cmd with mod=vendor
 			return nil, err
-		} else {
-			if len(out) == 0 {
-				return nil, err
-			}
+		}
+
+		if len(out) == 0 {
+			return nil, err
 		}
 	}
 
@@ -102,6 +105,8 @@ func runGoList(path string) ([]byte, error) {
 	return out, nil
 }
 
+// GetGolangDeps uses `go list` gather a list of dependencies located at `path`
+// returning an array of `GoPkg` structs
 func GetGolangDeps(path string) (map[string]GoPkg, error) {
 	// need to use a map as we'll get lots of duplicate entries
 	gathered := make(map[string]GoPkg)

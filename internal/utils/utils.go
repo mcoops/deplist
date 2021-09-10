@@ -1,6 +1,6 @@
 package utils
 
-// fastest way we can do a string compare on a list
+// BelongsToIgnoreList is fastest way we can do a string compare on a list
 func BelongsToIgnoreList(needle string) bool {
 	switch needle {
 	case
