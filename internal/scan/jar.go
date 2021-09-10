@@ -6,6 +6,7 @@ import (
 	"github.com/mcoops/jargo"
 )
 
+// GetJarDeps uses github.com/mcoops/jargo retrieve the java dependencies
 func GetJarDeps(path string) (map[string]string, error) {
 	gathered := make(map[string]string)
 

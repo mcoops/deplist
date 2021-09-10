@@ -10,6 +10,7 @@ import (
 // Account for >, <, >=, <=, ==, !=, ~= and *
 var /* const */ re = regexp.MustCompile(`[<>!~*]+`)
 
+// GetPythonDeps scans path for python deps using the `requirements.txt` file
 func GetPythonDeps(path string) (map[string]string, error) {
 	gathered := make(map[string]string)
 
@@ -40,7 +41,7 @@ func GetPythonDeps(path string) (map[string]string, error) {
 		}
 
 		// every other permitation just use the name as we can't guarantee
-		// the version, just grab the name using first occurance
+		// the version, just grab the name using first occurrence
 		match := re.FindStringIndex(line)
 
 		if match != nil {
