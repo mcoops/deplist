@@ -1,21 +1,12 @@
-# github.com/mcoops/jargo v0.0.0-20210410052334-26a02fc9f941
+# github.com/mcoops/jargo v1.0.1
+## explicit
 github.com/mcoops/jargo
 # github.com/vifraa/gopom v0.1.0
 github.com/vifraa/gopom
-# golang.org/x/mod v0.3.0
+# golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
+## explicit
+# golang.org/x/mod v0.4.2
+## explicit
 golang.org/x/mod/semver
-# golang.org/x/tools v0.0.0-20201223010750-3fa0e8f87c1a
-golang.org/x/tools/go/gcexportdata
-golang.org/x/tools/go/internal/gcimporter
-golang.org/x/tools/go/internal/packagesdriver
-golang.org/x/tools/go/packages
-golang.org/x/tools/internal/event
-golang.org/x/tools/internal/event/core
-golang.org/x/tools/internal/event/keys
-golang.org/x/tools/internal/event/label
-golang.org/x/tools/internal/gocommand
-golang.org/x/tools/internal/packagesinternal
-golang.org/x/tools/internal/typesinternal
-# golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
-golang.org/x/xerrors
-golang.org/x/xerrors/internal
+# golang.org/x/tools v0.1.6
+## explicit
