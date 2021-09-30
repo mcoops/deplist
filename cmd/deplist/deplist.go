@@ -5,12 +5,18 @@ import (
 	"fmt"
 
 	"github.com/mcoops/deplist"
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {
 	deptypePtr := flag.Int("deptype", -1, "golang, nodejs, python etc")
+	debugPtr := flag.Bool("debug", false, "debug logging (default false)")
 
 	flag.Parse()
+
+	if *debugPtr == true {
+		log.SetLevel(log.DebugLevel)
+	}
 
 	if flag.Args() == nil || len(flag.Args()) == 0 {
 		fmt.Println("Not path to scan was specified, i.e. deplist /tmp/files/")

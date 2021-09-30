@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	log "github.com/sirupsen/logrus"
 	"golang.org/x/mod/semver"
 )
 
@@ -75,6 +76,7 @@ func runCmd(path string, mod bool) ([]byte, error) {
 	// mod=vendor sometimes still returns results but returns an error. In
 	// that case ignore the error and return what we can
 	if err != nil {
+		log.Debug(string(err.(*exec.ExitError).Stderr))
 		if !mod {
 			// assume some retrival error, we have to redo the cmd with mod=vendor
 			return nil, err
@@ -108,6 +110,7 @@ func runGoList(path string) ([]byte, error) {
 // GetGolangDeps uses `go list` gather a list of dependencies located at `path`
 // returning an array of `GoPkg` structs
 func GetGolangDeps(path string) (map[string]GoPkg, error) {
+	log.Debugf("GetGolangDeps %s", path)
 	// need to use a map as we'll get lots of duplicate entries
 	gathered := make(map[string]GoPkg)
 
