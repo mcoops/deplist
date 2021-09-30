@@ -4,11 +4,14 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 )
 
 // GetMvnDeps uses the mvn command to attempt to list the dependencies for a
 // given project located at `path`
 func GetMvnDeps(path string) (map[string]string, error) {
+	log.Debugf("GetMvnDeps %s", path)
 	var gathered map[string]string
 	var found map[string]bool
 

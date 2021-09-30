@@ -6,11 +6,14 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 )
 
 // GetRubyDeps uses `bundle update --bundler` to list ruby dependencies when a
 // Gemfile.lock file exists
 func GetRubyDeps(path string) (map[string]string, error) {
+	log.Debugf("GetRubyDeps %s", path)
 	gathered := make(map[string]string)
 
 	dirPath := filepath.Dir(path)
@@ -29,8 +32,9 @@ func GetRubyDeps(path string) (map[string]string, error) {
 	cmd.Dir = dirPath
 	cmd.Env = os.Environ()
 	cmd.Env = append(cmd.Env, "BUNDLE_PATH="+gemPath)
-	_, err = cmd.Output()
+	output, err := cmd.CombinedOutput()
 	if err != nil {
+		log.Debug(string(output))
 		return nil, err
 	}
 
@@ -42,6 +46,7 @@ func GetRubyDeps(path string) (map[string]string, error) {
 
 	data, err := cmd.Output()
 	if err != nil {
+		log.Debug(string(data))
 		return nil, errors.New(gemPath + " " + err.Error())
 	}
 
