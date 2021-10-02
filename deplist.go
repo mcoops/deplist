@@ -207,7 +207,7 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 					deps = append(deps,
 						Dependency{
 							DepType: LangRuby,
-							Path:    name,
+							Path:    strings.TrimSuffix(name, "\n"),
 							Version: strings.Replace(version, "v", "", 1),
 							Files:   []string{},
 						})
