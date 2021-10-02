@@ -15,3 +15,14 @@ func BelongsToIgnoreList(needle string) bool {
 	}
 	return false
 }
+
+func CharIsDigit(c string) bool {
+	if len(c) == 0 {
+		return false
+	}
+
+	if c[0] < '0' || c[0] > '9' {
+		return false
+	}
+	return true
+}
