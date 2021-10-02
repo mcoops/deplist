@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/mcoops/deplist"
+	purl "github.com/mcoops/packageurl-go"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -33,10 +34,9 @@ func main() {
 	if *deptypePtr == -1 {
 		for _, dep := range deps {
 			version := dep.Version
-			if version != "" {
-				version = "@" + version
-			}
-			fmt.Printf("pkg:%s/%s%s\n", deplist.GetLanguageStr(dep.DepType), dep.Path, version)
+
+			inst, _ := purl.FromString(fmt.Sprintf("pkg:%s/%s@%s", deplist.GetLanguageStr(dep.DepType), dep.Path, version))
+			fmt.Println(inst)
 		}
 	} else {
 		deptype := deplist.Bitmask(*deptypePtr)
