@@ -234,6 +234,9 @@ func BuildWant() []Dependency {
 		"cotyledon",
 		"Flask",
 		"kuryr-lib",
+		"docutils",
+		"python-dateutil",
+		"unittest2",
 		"cryptography",
 	}
 
@@ -273,6 +276,9 @@ func BuildWant() []Dependency {
 		}
 		deps = append(deps, d)
 	}
+
+	end = len(deps) - 2 // get the cryptography ver
+	deps[end].Version = "0.5.1"
 
 	end = len(deps) - 1 // get the cryptography ver
 	deps[end].Version = "2.3.0"

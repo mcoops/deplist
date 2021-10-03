@@ -31,14 +31,24 @@ func GetPythonDeps(path string) (map[string]string, error) {
 		line := scanner.Text()
 
 		// skip comments
-		if strings.HasPrefix(line, "#") || line == "" {
+		// and editable? https://github.com/pypa/pip/issues/4812
+		if strings.HasPrefix(line, "#") || strings.HasPrefix(line, "-e") || line == "" {
 			continue
 		}
 
 		// easy case, elasticsearch-curator==5.8.1
 		// record name and version, only for ==
-		idx := strings.LastIndex(line, "==")
+		idx := strings.Index(line, "==")
 		if idx > 0 {
+			// test if there's a ';', i.e. unittest2==0.5.1; python_version == '2.6'
+			colIdx := strings.Index(line, ";")
+			if colIdx > 0 {
+				if idx+2 >= colIdx {
+					continue
+				}
+				// truncate line
+				line = line[:colIdx]
+			}
 			gathered[line[:idx]] = line[idx+2:]
 			continue
 		}
