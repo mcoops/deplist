@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/mcoops/deplist/internal/utils"
+	log "github.com/sirupsen/logrus"
 )
 
 type yarnDependencies []yarnDependency
@@ -98,6 +99,7 @@ func gatherNPMNode(name string, dependency npmDependency) {
 // then use the appropriate pkg managers to produce depencies lists of type
 // `NodeJSGather`
 func GetNodeJSDeps(path string) (map[string]NodeJSGather, error) {
+	log.Debugf("GetNodeJSDeps %s", path)
 	switch filepath.Base(path) {
 	case "yarn.lock":
 		return getYarnDeps(path)

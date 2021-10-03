@@ -4,10 +4,12 @@ import (
 	"strings"
 
 	"github.com/mcoops/jargo"
+	log "github.com/sirupsen/logrus"
 )
 
 // GetJarDeps uses github.com/mcoops/jargo retrieve the java dependencies
 func GetJarDeps(path string) (map[string]string, error) {
+	log.Debugf("GetJarDeps %s", path)
 	gathered := make(map[string]string)
 
 	jar, err := jargo.GetJarInfo(path)

@@ -5,6 +5,8 @@ import (
 	"os"
 	"regexp"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 )
 
 // Account for >, <, >=, <=, ==, !=, ~= and *
@@ -12,6 +14,7 @@ var /* const */ re = regexp.MustCompile(`[<>!~*]+`)
 
 // GetPythonDeps scans path for python deps using the `requirements.txt` file
 func GetPythonDeps(path string) (map[string]string, error) {
+	log.Debugf("GetPythonDeps %s", path)
 	gathered := make(map[string]string)
 
 	file, err := os.Open(path)
