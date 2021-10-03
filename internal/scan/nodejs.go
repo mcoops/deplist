@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/mcoops/deplist/internal/utils"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -45,9 +46,14 @@ var gatheredNode map[string]NodeJSGather
 func recordPackage(packageName, version string) {
 	// opposite now, we don't care if its specifying version ranges like 5.x.x,
 	// or 5.* etc. Just get the versions.
-	if len(version) > 0 &&
-		(version[0] == '^' || version[0] == '~' || version[0] == '*' || version[len(version)-1] == 'x') {
-		return
+	if len(version) > 0 {
+		if !utils.CharIsDigit(version) {
+			return
+		}
+
+		if version[len(version)-1] == 'x' {
+			return
+		}
 	}
 
 	if _, ok := gatheredNode[packageName+version]; !ok {
