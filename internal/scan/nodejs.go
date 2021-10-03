@@ -47,11 +47,23 @@ func recordPackage(packageName, version string) {
 	// opposite now, we don't care if its specifying version ranges like 5.x.x,
 	// or 5.* etc. Just get the versions.
 	if len(version) > 0 {
+		// skip if it's specifying the major
+		// i.e. d3-path@2 only care about d3-path@2.0.0
+		if len(version) == 1 {
+			return
+		}
+
+		// if not digit, then range
 		if !utils.CharIsDigit(version) {
 			return
 		}
 
 		if version[len(version)-1] == 'x' {
+			return
+		}
+
+		// still a version range
+		if strings.Contains(version, " - ") || strings.Contains(version, "||") {
 			return
 		}
 	}
