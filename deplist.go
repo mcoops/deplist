@@ -126,7 +126,7 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 				ext := filepath.Ext(filename)
 
 				// java
-				if ext == ".jar" || ext == ".war" || ext == ".hpi" || ext == ".zip" {
+				if ext == ".jar" || ext == ".war" || ext == ".ear" || ext == ".adm" || ext == ".hpi" || ext == ".zip" {
 					pkgs, err := scan.GetJarDeps(path)
 					if err == nil {
 
