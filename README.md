@@ -1,4 +1,4 @@
-[![Tests](https://github.com/mcoops/deplist/actions/workflows/go.yml/badge.svg)](https://github.com/mcoops/deplist/actions/workflows/go.yml)
+[![Tests](https://github.com/RedHatProductSecurity/deplist/actions/workflows/go.yml/badge.svg)](https://github.com/RedHatProductSecurity/deplist/actions/workflows/go.yml)
 
 # deplist
 
