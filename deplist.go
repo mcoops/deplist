@@ -71,6 +71,7 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 
 	pomPath := filepath.Join(fullPath, "pom.xml")
 	goPath := filepath.Join(fullPath, "go.mod")
+	goPkgPath := filepath.Join(fullPath, "Gopkg.lock")
 	rubyPath := filepath.Join(fullPath, "Gemfile.lock")
 	pythonPath := filepath.Join(fullPath, "requirements.txt")
 
@@ -165,10 +166,27 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 				}
 
 				for path, goPkg := range pkgs {
-
 					d := Dependency{
 						DepType: LangGolang,
 						Path:    path,
+						Files:   goPkg.Gofiles,
+						Version: goPkg.Version,
+					}
+					deps = append(deps, d)
+				}
+			case goPkgPath:
+				pkgs, err := scan.GetGoPkgDeps(path)
+				if err != nil {
+					return err
+				}
+
+				if len(pkgs) > 0 {
+					foundTypes.DepFoundAddFlag(LangGolang)
+				}
+				for _, goPkg := range pkgs {
+					d := Dependency{
+						DepType: LangGolang,
+						Path:    goPkg.Name,
 						Files:   goPkg.Gofiles,
 						Version: goPkg.Version,
 					}

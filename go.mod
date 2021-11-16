@@ -3,6 +3,7 @@ module github.com/mcoops/deplist
 go 1.16
 
 require (
+	github.com/BurntSushi/toml v0.4.1
 	github.com/mcoops/jargo v1.0.1
 	github.com/mcoops/packageurl-go v0.2.0
 	github.com/sirupsen/logrus v1.8.1
