@@ -187,7 +187,6 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 					d := Dependency{
 						DepType: LangGolang,
 						Path:    goPkg.Name,
-						Files:   goPkg.Gofiles,
 						Version: goPkg.Version,
 					}
 					deps = append(deps, d)

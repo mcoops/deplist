@@ -10,7 +10,6 @@ import (
 type GoPkgLockDeps struct {
 	Name    string
 	Version string
-	Gofiles []string
 }
 
 type goPkg struct {
