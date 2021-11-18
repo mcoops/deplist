@@ -49,6 +49,31 @@ func BuildWant() []Dependency {
 		"unsafe",
 	}
 
+	glidePaths := []string{
+		"github.com/beorn7/perks",
+		"github.com/beorn7/perks/quantile",
+		"github.com/bgentry/speakeasy",
+		"github.com/boltdb/bolt",
+		"github.com/cockroachdb/cmux",
+		"github.com/coreos/go-semver",
+		"github.com/coreos/go-semver/semver",
+		"github.com/coreos/go-systemd",
+		"github.com/coreos/go-systemd/daemon",
+		"github.com/coreos/go-systemd/journal",
+		"github.com/coreos/go-systemd/util",
+	}
+
+	gopkgPaths := []string{
+		"github.com/BurntSushi/toml",
+		"github.com/aws/aws-sdk-go",
+		"github.com/aws/aws-sdk-go/aws",
+		"github.com/aws/aws-sdk-go/aws/awserr",
+		"github.com/aws/aws-sdk-go/aws/awsutil",
+		"github.com/aws/aws-sdk-go/aws/client",
+		"github.com/aws/aws-sdk-go/aws/client/metadata",
+		"github.com/aws/aws-sdk-go/aws/corehandlers",
+	}
+
 	npmSet1 := []string{
 		"loose-envify",
 		"iconv-lite",
@@ -207,6 +232,25 @@ func BuildWant() []Dependency {
 	}
 
 	deps[4].Version = "v0.3.3" // test golang.org/x/text/unicode version
+
+	for _, n := range glidePaths {
+		deps = append(deps, Dependency{
+			DepType: 1,
+			Path:    n,
+		})
+	}
+
+	for i, n := range gopkgPaths {
+		ver := ""
+		if i > 0 {
+			ver = "v1.13.49"
+		}
+		deps = append(deps, Dependency{
+			DepType: 1,
+			Path:    n,
+			Version: ver,
+		})
+	}
 
 	for _, n := range npmSet1 {
 		d := Dependency{
