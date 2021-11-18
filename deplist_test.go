@@ -8,42 +8,45 @@ func BuildWant() []Dependency {
 	var deps []Dependency
 
 	golangPaths := []string{
-		"internal/cpu",
-		"unsafe",
-		"internal/bytealg",
-		"runtime/internal/atomic",
-		"runtime/internal/sys",
-		"runtime/internal/math",
-		"runtime",
-		"internal/reflectlite",
 		"errors",
-		"math/bits",
-		"math",
-		"unicode/utf8",
-		"strconv",
-		"internal/race",
-		"sync/atomic",
-		"sync",
-		"unicode",
-		"reflect",
-		"sort",
+		"fmt",
+		"github.com/mcoops/deplist",
+		"github.com/openshift/api/config/v1",
+		"golang.org/x/text/unicode",
+		"internal/abi",
+		"internal/bytealg",
+		"internal/cpu",
 		"internal/fmtsort",
-		"io",
+		"internal/goexperiment",
+		"internal/itoa",
 		"internal/oserror",
-		"syscall",
-		"time",
 		"internal/poll",
+		"internal/race",
+		"internal/reflectlite",
 		"internal/syscall/execenv",
 		"internal/syscall/unix",
 		"internal/testlog",
-		"os",
-		"fmt",
-		"path",
-		"io/fs",
 		"internal/unsafeheader",
-		"github.com/openshift/api/config/v1",
-		"golang.org/x/text/unicode",
-		"github.com/mcoops/deplist",
+		"io",
+		"io/fs",
+		"math",
+		"math/bits",
+		"os",
+		"path",
+		"reflect",
+		"runtime",
+		"runtime/internal/atomic",
+		"runtime/internal/math",
+		"runtime/internal/sys",
+		"sort",
+		"strconv",
+		"sync",
+		"sync/atomic",
+		"syscall",
+		"time",
+		"unicode",
+		"unicode/utf8",
+		"unsafe",
 	}
 
 	npmSet1 := []string{
@@ -203,8 +206,7 @@ func BuildWant() []Dependency {
 		deps = append(deps, d)
 	}
 
-	end := len(deps) - 2 // get the unicode ver
-	deps[end].Version = "v0.3.3"
+	deps[4].Version = "v0.3.3" // test golang.org/x/text/unicode version
 
 	for _, n := range npmSet1 {
 		d := Dependency{
@@ -231,7 +233,7 @@ func BuildWant() []Dependency {
 		deps = append(deps, d)
 	}
 
-	end = len(deps) - 2 // get the cryptography ver
+	end := len(deps) - 2 // get the cryptography ver
 	deps[end].Version = "0.5.1"
 
 	end = len(deps) - 1 // get the cryptography ver
