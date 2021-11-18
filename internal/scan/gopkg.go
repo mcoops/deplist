@@ -1,6 +1,8 @@
 package scan
 
 import (
+	"path/filepath"
+
 	"github.com/BurntSushi/toml"
 	log "github.com/sirupsen/logrus"
 )
@@ -8,7 +10,6 @@ import (
 type GoPkgLockDeps struct {
 	Name    string
 	Version string
-	Gofiles []string
 }
 
 type goPkg struct {
@@ -39,18 +40,23 @@ func GetGoPkgDeps(path string) ([]GoPkgLockDeps, error) {
 			ver = d.Revision
 		}
 
-		var files []string
-		if len(d.Packages) > 1 {
-			files = append(files, d.Packages...)
-		}
-
 		gathered = append(gathered,
 			GoPkgLockDeps{
 				Name:    d.Name,
 				Version: ver,
-				Gofiles: files,
 			},
 		)
+
+		for _, subpackage := range d.Packages {
+			if subpackage != "." {
+				gathered = append(gathered,
+					GoPkgLockDeps{
+						Name:    filepath.Join(d.Name, subpackage),
+						Version: ver,
+					},
+				)
+			}
+		}
 	}
 
 	return gathered, nil
