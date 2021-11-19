@@ -129,6 +129,10 @@ func GetDeps(fullPath string) ([]Dependency, Bitmask, error) {
 
 				// java
 				if ext == ".jar" || ext == ".war" || ext == ".ear" || ext == ".adm" || ext == ".hpi" || ext == ".zip" {
+					file := strings.Replace(filepath.Base(path), ext, "", 1) // get filename, check if we can ignore
+					if strings.HasSuffix(file, "-sources") || strings.HasSuffix(file, "-javadoc") {
+						return nil
+					}
 					pkgs, err := scan.GetJarDeps(path)
 					if err == nil {
 
