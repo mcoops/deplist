@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/mcoops/deplist"
+	"github.com/RedHatProductSecurity/deplist"
 	purl "github.com/mcoops/packageurl-go"
 	log "github.com/sirupsen/logrus"
 )
