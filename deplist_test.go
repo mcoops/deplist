@@ -8,42 +8,70 @@ func BuildWant() []Dependency {
 	var deps []Dependency
 
 	golangPaths := []string{
-		"internal/cpu",
-		"unsafe",
-		"internal/bytealg",
-		"runtime/internal/atomic",
-		"runtime/internal/sys",
-		"runtime/internal/math",
-		"runtime",
-		"internal/reflectlite",
 		"errors",
-		"math/bits",
-		"math",
-		"unicode/utf8",
-		"strconv",
-		"internal/race",
-		"sync/atomic",
-		"sync",
-		"unicode",
-		"reflect",
-		"sort",
+		"fmt",
+		"github.com/mcoops/deplist",
+		"github.com/openshift/api/config/v1",
+		"golang.org/x/text/unicode",
+		"internal/abi",
+		"internal/bytealg",
+		"internal/cpu",
 		"internal/fmtsort",
-		"io",
+		"internal/goexperiment",
+		"internal/itoa",
 		"internal/oserror",
-		"syscall",
-		"time",
 		"internal/poll",
+		"internal/race",
+		"internal/reflectlite",
 		"internal/syscall/execenv",
 		"internal/syscall/unix",
 		"internal/testlog",
-		"os",
-		"fmt",
-		"path",
-		"io/fs",
 		"internal/unsafeheader",
-		"github.com/openshift/api/config/v1",
-		"golang.org/x/text/unicode",
-		"github.com/mcoops/deplist",
+		"io",
+		"io/fs",
+		"math",
+		"math/bits",
+		"os",
+		"path",
+		"reflect",
+		"runtime",
+		"runtime/internal/atomic",
+		"runtime/internal/math",
+		"runtime/internal/sys",
+		"sort",
+		"strconv",
+		"sync",
+		"sync/atomic",
+		"syscall",
+		"time",
+		"unicode",
+		"unicode/utf8",
+		"unsafe",
+	}
+
+	glidePaths := []string{
+		"github.com/beorn7/perks",
+		"github.com/beorn7/perks/quantile",
+		"github.com/bgentry/speakeasy",
+		"github.com/boltdb/bolt",
+		"github.com/cockroachdb/cmux",
+		"github.com/coreos/go-semver",
+		"github.com/coreos/go-semver/semver",
+		"github.com/coreos/go-systemd",
+		"github.com/coreos/go-systemd/daemon",
+		"github.com/coreos/go-systemd/journal",
+		"github.com/coreos/go-systemd/util",
+	}
+
+	gopkgPaths := []string{
+		"github.com/BurntSushi/toml",
+		"github.com/aws/aws-sdk-go",
+		"github.com/aws/aws-sdk-go/aws",
+		"github.com/aws/aws-sdk-go/aws/awserr",
+		"github.com/aws/aws-sdk-go/aws/awsutil",
+		"github.com/aws/aws-sdk-go/aws/client",
+		"github.com/aws/aws-sdk-go/aws/client/metadata",
+		"github.com/aws/aws-sdk-go/aws/corehandlers",
 	}
 
 	npmSet1 := []string{
@@ -203,8 +231,26 @@ func BuildWant() []Dependency {
 		deps = append(deps, d)
 	}
 
-	end := len(deps) - 2 // get the unicode ver
-	deps[end].Version = "v0.3.3"
+	deps[4].Version = "v0.3.3" // test golang.org/x/text/unicode version
+
+	for _, n := range glidePaths {
+		deps = append(deps, Dependency{
+			DepType: 1,
+			Path:    n,
+		})
+	}
+
+	for i, n := range gopkgPaths {
+		ver := ""
+		if i > 0 {
+			ver = "v1.13.49"
+		}
+		deps = append(deps, Dependency{
+			DepType: 1,
+			Path:    n,
+			Version: ver,
+		})
+	}
 
 	for _, n := range npmSet1 {
 		d := Dependency{
@@ -231,7 +277,7 @@ func BuildWant() []Dependency {
 		deps = append(deps, d)
 	}
 
-	end = len(deps) - 2 // get the cryptography ver
+	end := len(deps) - 2 // get the cryptography ver
 	deps[end].Version = "0.5.1"
 
 	end = len(deps) - 1 // get the cryptography ver

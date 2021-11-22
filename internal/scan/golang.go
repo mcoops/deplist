@@ -55,7 +55,7 @@ func runCmd(path string, mod bool) ([]byte, error) {
 	var cmd *exec.Cmd
 
 	if !mod {
-		cmd = exec.CommandContext(ctx, "go", "list", "-f", "'{{if not .Standard}}{{.Module}}{{end}}'", "-json", "-deps", "./...")
+		cmd = exec.CommandContext(ctx, "go", "list", "-json", "-deps", "./...")
 	} else {
 		vendorDir := filepath.Join(filepath.Dir(path), "vendor")
 		if _, err := os.Stat(vendorDir); err != nil {
@@ -63,7 +63,7 @@ func runCmd(path string, mod bool) ([]byte, error) {
 				return nil, errors.New("no 'vendor' directory, can't use '-mod=vendor'")
 			}
 		}
-		cmd = exec.CommandContext(ctx, "go", "list", "-mod=vendor", "-f", "'{{if not .Standard}}{{.Module}}{{end}}'", "-json", "-deps", "./...")
+		cmd = exec.CommandContext(ctx, "go", "list", "-mod=vendor", "-json", "-deps", "./...")
 	}
 
 	cmd.Dir = filepath.Dir(path) // // force directory
