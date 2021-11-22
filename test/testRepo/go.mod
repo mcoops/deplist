@@ -1,4 +1,4 @@
-module github.com/mcoops/deplist
+module github.com/RedHatProductSecurity/deplist
 
 go 1.13
 

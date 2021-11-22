@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/mcoops/deplist/internal/utils"
+	"github.com/RedHatProductSecurity/deplist/internal/utils"
 	log "github.com/sirupsen/logrus"
 )
 
