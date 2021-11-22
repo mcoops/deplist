@@ -1,5 +1,9 @@
 [![Tests](https://github.com/mcoops/deplist/actions/workflows/go.yml/badge.svg)](https://github.com/mcoops/deplist/actions/workflows/go.yml)
 
+# THIS REPOSITORY IS NO LONGER MAINTAINED
+
+The new repository can be found at: https://github.com/RedHatProductSecurity/deplist
+
 # deplist
 
 Scans a given repo for Golang, NodeJS (more comming) for dependencies.
