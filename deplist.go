@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/RedHatProductSecurity/deplist/internal/scan"
-	"github.com/RedHatProductSecurity/deplist/internal/utils"
+	"github.com/mcoops/deplist/internal/scan"
+	"github.com/mcoops/deplist/internal/utils"
 )
 
 // enums start at 1 to allow us to specify found languages 0 = nil

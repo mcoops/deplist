@@ -10,7 +10,7 @@ func BuildWant() []Dependency {
 	golangPaths := []string{
 		"errors",
 		"fmt",
-		"github.com/RedHatProductSecurity/deplist",
+		"github.com/mcoops/deplist",
 		"github.com/openshift/api/config/v1",
 		"golang.org/x/text/unicode",
 		"internal/abi",
